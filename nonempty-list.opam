@@ -13,7 +13,7 @@ bug-reports: "https://github.com/mbarbin/nonempty-list/issues"
 depends: [
   "ocaml" {>= "5.1"}
   "dune" {>= "3.11" & >= "3.11"}
-  "core" {>= "v0.16" & < "v0.17"}
+  "base" {>= "v0.16" & < "v0.17"}
   "ppx_jane" {>= "v0.16" & < "v0.17"}
   "reversed-list" {>= "v0.16" & < "v0.17"}
   "odoc" {with-doc}

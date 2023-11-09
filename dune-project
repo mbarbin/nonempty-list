@@ -17,14 +17,16 @@
 
 (package
  (name nonempty-list)
- (synopsis "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
- (description "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
+ (synopsis
+  "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
+ (description
+  "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
  (depends
   (ocaml
    (>= 5.1))
   (dune
    (>= 3.11))
-  (core
+  (base
    (and
     (>= v0.16)
     (< v0.17)))

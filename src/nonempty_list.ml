@@ -1,14 +1,12 @@
-open Core.Core_stable
-
 module Stable = struct
   module V3 = struct
     module T = struct
-      type nonrec 'a t = ( :: ) of 'a * 'a list [@@deriving compare, equal, hash]
+      type nonrec 'a t = ( :: ) of 'a * 'a Base.list [@@deriving compare, equal, hash]
 
       let to_list (hd :: tl) : _ list = hd :: tl
 
       let of_list_exn : _ list -> _ t = function
-        | [] -> Core.raise_s [%message "Nonempty_list.of_list_exn: empty list"]
+        | [] -> Base.raise_s [%message "Nonempty_list.of_list_exn: empty list"]
         | hd :: tl -> hd :: tl
       ;;
     end
@@ -16,25 +14,11 @@ module Stable = struct
     include T
 
     module Format = struct
-      type 'a t = 'a list [@@deriving bin_io, sexp, stable_witness]
+      type 'a t = 'a Base.list [@@deriving sexp]
     end
 
     include
-      Binable.Of_binable1.V2
-        (Format)
-        (struct
-          include T
-
-          let to_binable = to_list
-          let of_binable = of_list_exn
-
-          let caller_identity =
-            Bin_prot.Shape.Uuid.of_string "9a63aaee-82e0-11ea-8fb6-aa00005c6184"
-          ;;
-        end)
-
-    include
-      Sexpable.Of_sexpable1.V1
+      Base.Sexpable.Of_sexpable1
         (Format)
         (struct
           include T
@@ -48,117 +32,14 @@ module Stable = struct
       =
       { untyped = List (Cons (element, Many element)) }
     ;;
-
-    let stable_witness (type a) : a Stable_witness.t -> a t Stable_witness.t =
-      fun witness ->
-      let module Stable_witness = Stable_witness.Of_serializable1 (Format) (T) in
-      Stable_witness.of_serializable Format.stable_witness of_list_exn to_list witness
-    ;;
-
-    let%expect_test _ =
-      print_endline [%bin_digest: int t];
-      [%expect {| eaa5c1535ea5c1691291b3bdbbd7b014 |}]
-    ;;
-  end
-
-  module V2 = struct
-    module T = struct
-      type nonrec 'a t = 'a V3.t = ( :: ) of 'a * 'a list
-      [@@deriving compare, equal, hash]
-
-      let sexp_of_t = V3.sexp_of_t
-      let t_of_sexp = V3.t_of_sexp
-    end
-
-    include T
-
-    module Record_format = struct
-      type 'a t =
-        { hd : 'a
-        ; tl : 'a list
-        }
-      [@@deriving bin_io, compare, stable_witness]
-
-      let of_nonempty_list (hd :: tl) = { hd; tl }
-      let to_nonempty_list { hd; tl } = hd :: tl
-    end
-
-    include
-      Binable.Of_binable1.V1 [@alert "-legacy"]
-        (Record_format)
-        (struct
-          include T
-
-          let to_binable = Record_format.of_nonempty_list
-          let of_binable = Record_format.to_nonempty_list
-        end)
-
-    let stable_witness (type a) : a Stable_witness.t -> a t Stable_witness.t =
-      fun witness ->
-      let module Stable_witness = Stable_witness.Of_serializable1 (Record_format) (T) in
-      Stable_witness.of_serializable
-        Record_format.stable_witness
-        Record_format.to_nonempty_list
-        Record_format.of_nonempty_list
-        witness
-    ;;
-
-    let%expect_test _ =
-      print_endline [%bin_digest: int t];
-      [%expect {| 2aede2e9b03754f5dfa5f1a61877b330 |}]
-    ;;
-  end
-
-  module V1 = struct
-    module T = struct
-      type 'a t = 'a V2.t = ( :: ) of 'a * 'a list [@@deriving compare, equal]
-
-      let sexp_of_t = V2.sexp_of_t
-      let t_of_sexp = V2.t_of_sexp
-    end
-
-    include T
-
-    module Pair_format = struct
-      type 'a t = 'a * 'a list [@@deriving bin_io, compare, stable_witness]
-
-      let of_nonempty_list (hd :: tl) = hd, tl
-      let to_nonempty_list (hd, tl) = hd :: tl
-    end
-
-    include
-      Binable.Of_binable1.V1 [@alert "-legacy"]
-        (Pair_format)
-        (struct
-          include T
-
-          let to_binable = Pair_format.of_nonempty_list
-          let of_binable = Pair_format.to_nonempty_list
-        end)
-
-    let stable_witness (type a) : a Stable_witness.t -> a t Stable_witness.t =
-      fun witness ->
-      let module Stable_witness = Stable_witness.Of_serializable1 (Pair_format) (T) in
-      Stable_witness.of_serializable
-        Pair_format.stable_witness
-        Pair_format.to_nonempty_list
-        Pair_format.of_nonempty_list
-        witness
-    ;;
-
-    let%expect_test _ =
-      print_endline [%bin_digest: int t];
-      [%expect {| f27871ef428aef2925f18d6be687bf9c |}]
-    ;;
   end
 end
 
-open Core
+open Base
 module Unstable = Stable.V3
 
 module T' = struct
-  type 'a t = 'a Stable.V3.t = ( :: ) of 'a * 'a list
-  [@@deriving compare, equal, hash, quickcheck, typerep, bin_io]
+  type 'a t = 'a Stable.V3.t = ( :: ) of 'a * 'a list [@@deriving compare, equal, hash]
 
   let sexp_of_t = Stable.V3.sexp_of_t
   let t_of_sexp = Stable.V3.t_of_sexp
@@ -174,7 +55,7 @@ module T' = struct
   ;;
 
   let of_list_error = function
-    | [] -> Core.error_s [%message "empty list"]
+    | [] -> Or_error.error_s [%message "empty list"]
     | hd :: tl -> Ok (hd :: tl)
   ;;
 
@@ -242,7 +123,11 @@ let nth (hd :: tl) n =
 let nth_exn t n =
   match nth t n with
   | None ->
-    invalid_argf "Nonempty_list.nth_exn %d called on list of length %d" n (length t) ()
+    Base.Printf.invalid_argf
+      "Nonempty_list.nth_exn %d called on list of length %d"
+      n
+      (length t)
+      ()
   | Some a -> a
 ;;
 
@@ -395,8 +280,6 @@ let combine_or_errors t =
 ;;
 
 let combine_or_errors_unit t = to_list t |> Or_error.combine_errors_unit
-let validate ~name check t = Validate.list ~name check (to_list t)
-let validate_indexed check t = Validate.list_indexed check (to_list t)
 
 let rec rev_append xs acc =
   match (xs : _ Reversed_list.t) with
@@ -405,7 +288,7 @@ let rec rev_append xs acc =
 ;;
 
 let init n ~f =
-  if n < 1 then invalid_argf "Nonempty_list.init %d" n ();
+  if n < 1 then Base.Printf.invalid_argf "Nonempty_list.init %d" n ();
   (* [List.init] calls [f] on the highest index first and works its way down.
      We do the same here. *)
   let tl = List.init (n - 1) ~f:(fun i -> f (i + 1)) in
@@ -454,54 +337,3 @@ end
 let rev' (hd :: tl) =
   List.fold tl ~init:([ hd ] : _ Reversed.t) ~f:(Fn.flip Reversed.cons)
 ;;
-
-let flag arg_type =
-  Command.Param.map_flag
-    (Command.Param.one_or_more_as_pair arg_type)
-    ~f:(fun (one, more) -> one :: more)
-;;
-
-let comma_separated_argtype ?key ?strip_whitespace ?unique_values arg_type =
-  arg_type
-  |> Command.Param.Arg_type.comma_separated
-       ~allow_empty:false
-       ?strip_whitespace
-       ?unique_values
-  |> Command.Param.Arg_type.map ?key ~f:of_list_exn
-;;
-
-type 'a nonempty_list = 'a t
-
-(** This relies on the fact that the representation of [List.( :: )] constructor is
-    identical to that of [Nonempty_list.( :: )], and that they are each the first
-    non-constant constructor in their respective types. *)
-module Option = struct
-  type 'a t = 'a list
-  [@@deriving compare, equal, sexp, sexp_grammar, hash, quickcheck, typerep]
-
-  let none = []
-  let some (_ :: _ as value : 'a nonempty_list) : 'a t = Obj.magic value
-  let unchecked_value (t : 'a t) : 'a nonempty_list = Obj.magic t
-  let is_none t = phys_equal t none
-  let is_some t = not (is_none t)
-  let to_option = of_list
-
-  let of_option = function
-    | None -> none
-    | Some value -> some value
-  ;;
-
-  let value_exn = function
-    | [] -> raise_s [%sexp "Nonempty_list.Option.value_exn: empty list"]
-    | _ :: _ as l -> unchecked_value l
-  ;;
-
-  let value t ~default = Bool.select (is_none t) default (unchecked_value t)
-
-  module Optional_syntax = struct
-    module Optional_syntax = struct
-      let is_none = is_none
-      let unsafe_value = unchecked_value
-    end
-  end
-end
