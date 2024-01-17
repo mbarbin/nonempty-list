@@ -19,8 +19,6 @@
  (name nonempty-list)
  (synopsis
   "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
- (description
-  "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
  (depends
   (ocaml
    (>= 5.1))
