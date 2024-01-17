@@ -9,8 +9,8 @@ homepage: "https://github.com/mbarbin/nonempty-list"
 doc: "https://mbarbin.github.io/nonempty-list/"
 bug-reports: "https://github.com/mbarbin/nonempty-list/issues"
 depends: [
+  "dune" {>= "3.12"}
   "ocaml" {>= "5.1"}
-  "dune" {>= "3.11" & >= "3.11"}
   "base" {>= "v0.16" & < "v0.17"}
   "ppx_jane" {>= "v0.16" & < "v0.17"}
   "reversed-list" {>= "v0.16" & < "v0.17"}
