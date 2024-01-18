@@ -11,9 +11,6 @@ The code was slightly modified in order to remove dependencies into `Core` and
 solely depend on `Base` instead, making it available in more contexts, without
 requiring to add a dependency into `Core` and `Core_kernel`.
 
-For a repackaging of the original code, including the `Core` bits,
-see: https://github.com/mbarbin/nonempty-list-core
-
 ## Code documentation
 
 The code documentation of the latest release is built with `odoc` and published
