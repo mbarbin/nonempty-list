@@ -6,7 +6,7 @@
 
 (license MIT)
 
-(authors "Mathieu Barbin")
+(authors "Jane Street Group, LLC")
 
 (maintainers "Mathieu Barbin")
 
