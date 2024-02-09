@@ -1,14 +1,13 @@
-## Unreleased
-
-### Added
+## v0.16.2 (2024-02-09)
 
 ### Changed
 
-### Deprecated
+- Internal changes related to the release process.
+- Upgrade dune.
 
 ### Fixed
 
-### Removed
+- Refer to original authors in package metadata.
 
 ## v0.16.1 (2024-01-18)
 
