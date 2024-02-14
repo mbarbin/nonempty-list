@@ -1,17 +1,9 @@
-## v0.16.3 (unreleased)
-
-### Added
+## v0.16.3 (2024-02-14)
 
 ### Changed
 
 - Upgrade dune to `3.14`.
 - Build the doc with sherlodoc available to enable the doc search bar.
-
-### Deprecated
-
-### Fixed
-
-### Removed
 
 ## v0.16.2 (2024-02-09)
 
