@@ -1,3 +1,8 @@
+This library modifies the original `nonempty_list` project in order to make it
+a standalone opam package. The original code can be found
+[here](https://github.com/janestreet/core_kernel/tree/master/nonempty_list)
+and has the following license:
+
 The MIT License
 
 Copyright (c) 2008--2023 Jane Street Group, LLC opensource-contacts@janestreet.com
