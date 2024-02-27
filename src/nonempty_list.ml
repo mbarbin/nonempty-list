@@ -6,7 +6,7 @@ module Stable = struct
       let to_list (hd :: tl) : _ list = hd :: tl
 
       let of_list_exn : _ list -> _ t = function
-        | [] -> Base.raise_s [%message "Nonempty_list.of_list_exn: empty list"]
+        | [] -> Base.raise_s [%sexp "Nonempty_list.of_list_exn: empty list"]
         | hd :: tl -> hd :: tl
       ;;
     end
@@ -55,7 +55,7 @@ module T' = struct
   ;;
 
   let of_list_error = function
-    | [] -> Or_error.error_s [%message "empty list"]
+    | [] -> Or_error.error_s [%sexp "empty list"]
     | hd :: tl -> Ok (hd :: tl)
   ;;
 

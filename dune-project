@@ -30,24 +30,7 @@
    (and
     (>= v0.16)
     (< v0.17)))
-  (ppx_enumerate
-   (and
-    (>= v0.16)
-    (< v0.17)))
-  (ppx_expect
-   (and
-    :with-test
-    (>= v0.16)
-    (< v0.17)))
   (ppx_hash
-   (and
-    (>= v0.16)
-    (< v0.17)))
-  (ppx_here
-   (and
-    (>= v0.16)
-    (< v0.17)))
-  (ppx_let
    (and
     (>= v0.16)
     (< v0.17)))
