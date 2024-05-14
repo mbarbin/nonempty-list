@@ -21,7 +21,7 @@
   "Repackaging core_kernel.nonempty_list as a standalone package for using with Base")
  (depends
   (ocaml
-   (>= 5.1))
+   (>= 5.2))
   (base
    (and
     (>= v0.17)
