@@ -1,3 +1,10 @@
+## v0.17.0 (2024-05-27)
+
+### Added
+
+- Add `permute` and `[@deriving quickcheck]`.
+- Add `map2`, `map2_exn`, `cartesian_product`, `fold_nonempty` and `map_of_list_with_key_multi`.
+
 ## v0.16.4 (2024-03-13)
 
 ### Changed

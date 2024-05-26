@@ -39,7 +39,10 @@ open Base
 module Unstable = Stable.V3
 
 module T' = struct
-  type 'a t = 'a Stable.V3.t = ( :: ) of 'a * 'a list [@@deriving compare, equal, hash]
+  open Base_quickcheck
+
+  type 'a t = 'a Stable.V3.t = ( :: ) of 'a * 'a list
+  [@@deriving compare, equal, hash, quickcheck]
 
   let sexp_of_t = Stable.V3.sexp_of_t
   let t_of_sexp = Stable.V3.t_of_sexp
@@ -166,6 +169,14 @@ let filteri (hd :: tl) ~f : _ list =
 ;;
 
 let map t ~f = mapi t ~f:(fun (_ : int) x -> f x)
+
+let map2 t1 t2 ~f : _ List.Or_unequal_lengths.t =
+  match List.map2 (to_list t1) (to_list t2) ~f with
+  | Ok x -> Ok (of_list_exn x)
+  | Unequal_lengths -> Unequal_lengths
+;;
+
+let map2_exn t1 t2 ~f = List.map2_exn (to_list t1) (to_list t2) ~f |> of_list_exn
 let reduce (hd :: tl) ~f = List.fold ~init:hd tl ~f
 
 let reverse (hd :: tl) =
@@ -222,7 +233,8 @@ let to_sequence t =
 
 let sort t ~compare = List.sort (to_list t) ~compare |> of_list_exn
 let stable_sort t ~compare = List.stable_sort (to_list t) ~compare |> of_list_exn
-let dedup_and_sort ~compare t = List.dedup_and_sort ~compare (to_list t) |> of_list_exn
+let dedup_and_sort t ~compare = List.dedup_and_sort ~compare (to_list t) |> of_list_exn
+let permute ?random_state t = List.permute ?random_state (to_list t) |> of_list_exn
 
 let min_elt' (hd :: tl) ~compare =
   List.fold tl ~init:hd ~f:(fun min elt -> if compare min elt > 0 then elt else min)
@@ -244,6 +256,12 @@ let map_of_container_multi fold container ~comparator =
 let map_of_alist_multi alist = map_of_container_multi List.fold alist
 let map_of_sequence_multi sequence = map_of_container_multi Sequence.fold sequence
 let fold_nonempty (hd :: tl) ~init ~f = List.fold tl ~init:(init hd) ~f
+
+let map_of_list_with_key_multi list ~comparator ~get_key =
+  List.fold list ~init:(Map.empty comparator) ~f:(fun acc data ->
+    let key = get_key data in
+    map_add_multi acc ~key ~data)
+;;
 
 let fold_right (hd :: tl) ~init:acc ~f =
   let acc = List.fold_right tl ~init:acc ~f in

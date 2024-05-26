@@ -1,6 +1,11 @@
 (library
  (name nonempty_list)
  (public_name nonempty-list)
- (libraries base reversed-list)
+ (libraries base base_quickcheck reversed-list)
  (preprocess
-  (pps ppx_compare ppx_hash ppx_sexp_conv ppx_sexp_value)))
+  (pps
+   ppx_compare
+   ppx_hash
+   ppx_sexp_conv
+   ppx_sexp_value
+   base_quickcheck.ppx_quickcheck)))
