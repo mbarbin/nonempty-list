@@ -22,6 +22,10 @@
  (depends
   (ocaml
    (>= 5.2))
+  (ocamlformat
+   (and
+    :with-dev-setup
+    (= 0.26.2)))
   (base
    (and
     (>= v0.17)
