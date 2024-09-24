@@ -2,7 +2,7 @@
 opam-version: "2.0"
 synopsis:
   "Repackaging core_kernel.nonempty_list as a standalone package for using with Base"
-maintainer: ["Mathieu Barbin"]
+maintainer: ["Mathieu Barbin <opensource@mbarbin.org>"]
 authors: ["Jane Street Group, LLC"]
 license: "MIT"
 homepage: "https://github.com/mbarbin/nonempty-list"
