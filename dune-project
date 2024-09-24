@@ -8,7 +8,7 @@
 
 (authors "Jane Street Group, LLC")
 
-(maintainers "Mathieu Barbin")
+(maintainers "Mathieu Barbin <opensource@mbarbin.org>")
 
 (source
  (github mbarbin/nonempty-list))
