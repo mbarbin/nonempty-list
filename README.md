@@ -11,7 +11,7 @@ The code was slightly modified in order to remove dependencies into `Core` and
 solely depend on `Base` instead, making it available in more contexts, without
 requiring to add a dependency into `Core` and `Core_kernel`.
 
-## Code documentation
+## Code Documentation
 
 The code documentation of the latest release is built with `odoc` and published
 to `GitHub` pages [here](https://mbarbin.github.io/nonempty-list).
