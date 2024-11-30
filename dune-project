@@ -15,6 +15,8 @@
 
 (documentation "https://mbarbin.github.io/nonempty-list/")
 
+(implicit_transitive_deps false)
+
 (package
  (name nonempty-list)
  (synopsis
