@@ -6,6 +6,6 @@
   (pps
    ppx_compare
    ppx_hash
+   base_quickcheck.ppx_quickcheck
    ppx_sexp_conv
-   ppx_sexp_value
-   base_quickcheck.ppx_quickcheck)))
+   ppx_sexp_value)))
