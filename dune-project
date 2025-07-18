@@ -43,8 +43,7 @@
   (ppxlib
    (>= 0.33))
   (reversed-list
-   (and
-    (>= v0.17)))
+   (>= v0.17))
   (sherlodoc
    (and
     :with-doc
