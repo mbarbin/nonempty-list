@@ -11,7 +11,7 @@ bug-reports: "https://github.com/mbarbin/nonempty-list/issues"
 depends: [
   "dune" {>= "3.17"}
   "ocaml" {>= "5.2"}
-  "ocamlformat" {with-dev-setup & = "0.27.0"}
+  "ocamlformat" {with-dev-setup & = "0.28.1"}
   "base" {>= "v0.17"}
   "base_quickcheck" {>= "v0.17"}
   "ppx_compare" {>= "v0.17"}
